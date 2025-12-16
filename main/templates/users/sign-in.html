@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block 'content' %}
+<div>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div>
+            {% if field.errors %}
+            <div>
+                {{ field.errors }}
+            </div>
+            {% endif %}
+            <div>
+                {{ field.label }} {{ field }}
+            </div>
+        </div>
+        {% endfor %}
+        <button type="submit">Sign-In</button>
+    </form>
+</div>
+{% endblock 'content' %}

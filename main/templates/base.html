@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% if title %}
+        <title>{{ title }}</title>
+    {% else %}
+        <title>TimeSync</title>
+    {% endif %}
+</head>
+<body>
+    <a href="{% url 'home' %}">TimeSync</a>
+    {% if user.is_authenticated %}
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Log Out</button>
+        </form>
+    {% else %}
+        <a href="{% url 'sign-in' %}">Sign In</a>
+        <a href="{% url 'sign-up' %}">Sign Up</a>
+    {% endif %}
+    {% block 'content' %}
+    {% endblock 'content' %}
+</body>
+</html>
