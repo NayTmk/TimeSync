@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block 'content' %}
+<div>
+    <div>
+        <h2> Чи надає користувач послуги?</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in provider_form %}
+        <div>
+            {% if field.errors %}
+            <div>
+                {{ field.errors }}
+            </div>
+            {% endif %}
+            <div>
+                {{ field.label }} {{ field }}
+            </div>
+        </div>
+        {% endfor %}
+        <button type="submit" name="submit_provider">Submit</button>
+        </form>
+    </div>
+    <div>
+        <h2> Профіль користувача </h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in profile_update_form %}
+        <div>
+            {% if field.errors %}
+            <div>
+                {{ field.errors }}
+            </div>
+            {% endif %}
+            <div>
+                {{ field.label }} {{ field }}
+            </div>
+        </div>
+        {% endfor %}
+        <button type="submit" name="submit_profile">Submit</button>
+        </form>
+    </div>
+    <div>
+        <h2>Schedule</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ working_days_formset.management_form }}
+
+            <table border="1" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="padding: 8px;">Day</th>
+                        <th style="padding: 8px;">Weekend</th>
+                        <th style="padding: 8px;">Start</th>
+                        <th style="padding: 8px;">End</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in working_days_formset %}
+                    <tr>
+                        <td style="padding: 8px;">
+                            {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+
+                            <strong>{{ form.instance.get_day_display }}</strong>
+                        </td>
+
+                        <td style="padding: 8px; text-align: center;">
+                            {{ form.is_day_off }}
+                        </td>
+
+                        <td style="padding: 8px;">
+                            {{ form.start_time }}
+                            {% if form.start_time.errors %}
+                                <div style="color: red; font-size: 12px;">{{ form.start_time.errors }}</div>
+                            {% endif %}
+                        </td>
+
+                        <td style="padding: 8px;">
+                            {{ form.end_time }}
+                            {% if form.end_time.errors %}
+                                 <div style="color: red; font-size: 12px;">{{ form.end_time.errors }}</div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% if form.non_field_errors %}
+                    <tr>
+                        <td colspan="4" style="color: red;">{{ form.non_field_errors }}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div style="margin-top: 20px;">
+                <button type="submit" name="submit_working_days" value="1" style="padding: 10px 20px;">
+                    Зберегти графік
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock 'content' %}
